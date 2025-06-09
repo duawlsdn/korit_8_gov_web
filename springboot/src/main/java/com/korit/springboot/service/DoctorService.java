@@ -16,22 +16,34 @@ public class DoctorService {
     private DepartmentRepository departmentRepository;
 
     public void register(DoctorRegisterDto dto) {
+//        departmentRepository.findByDepartment(dto.getDepartment())
+//                .ifPresentOrElse(
+//                        (departmentEntity) -> {
+////                            DoctorEntity entity = dto.toEntity();
+//                            DoctorEntity entity = dto.toEntity(departmentEntity.getId());
+////                            entity.setDepartmentId(departmentEntity.getId());
+//                            doctorRepository.save(entity);
+//                        } ,
+//                        () -> {
+//                            DepartmentEntity department = DepartmentEntity.builder()
+//                                    .department(dto.getDepartment())
+//                                    .build();
+//                            DepartmentEntity departmentEntity = departmentRepository.save(department);
+////                            DoctorEntity entity = dto.toEntity();
+//                            DoctorEntity entity = dto.toEntity(departmentEntity.getId());
+////                            entity.setDepartmentId(savedEntity.getId());
+//                            doctorRepository.save(entity);
+//                        }
+//                );
+
+
         departmentRepository.findByDepartment(dto.getDepartment())
                 .ifPresentOrElse(
-                        (departmentEntity) -> {
-                            DoctorEntity entity = dto.toEntity();
-                            entity.setDepartmentId(departmentEntity.getId());   //
-                            doctorRepository.save(entity);
-                        } ,
-                        () -> {
-                            DepartmentEntity department = DepartmentEntity.builder()
+                        departmentEntity -> doctorRepository.save(dto.toEntity(departmentEntity.getId()))
+                        ,
+                        () -> doctorRepository.save(dto.toEntity(departmentRepository.save(DepartmentEntity.builder()
                                     .department(dto.getDepartment())
-                                    .build();
-                            DepartmentEntity savedEntity = departmentRepository.save(department);
-                            DoctorEntity entity = dto.toEntity();
-                            entity.setDepartmentId(savedEntity.getId());    //
-                            doctorRepository.save(entity);
-                        }
-                );
+                                    .build()).getId()))
+                        );
     }
 }

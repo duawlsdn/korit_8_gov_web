@@ -8,9 +8,16 @@ public class DoctorRegisterDto {
     private String doctorName;
     private String department;
 
-    public DoctorEntity toEntity() {
+//    public DoctorEntity toEntity() {
+//        return DoctorEntity.builder()
+//                .doctorName(doctorName)
+//                .build();
+//    }
+
+    public DoctorEntity toEntity(Integer departmentId) {
         return DoctorEntity.builder()
                 .doctorName(doctorName)
+                .departmentId(departmentId)
                 .build();
     }
 }
